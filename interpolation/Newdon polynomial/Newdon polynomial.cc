@@ -18,7 +18,8 @@ class Newdon_it
 {
 public:
     Newdon_it(const int num_of_inter_point)
-    :_noip(num_of_inter_point)
+    :_noip(num_of_inter_point),
+     _rcon(0)
     {
         _array = new Point[_noip];
         _ans = new double[_noip];
@@ -37,9 +38,13 @@ public:
     
     void res(double xt);
     void calcaute();
+    double calcaute_ret(int lhs,int rhs);
+    
+    void show_list();
 private:
     int _noip; //插值点个数
     int _order;
+    int _rcon; // ret_controal_order_num
     Point *_array; //插值点数组
     
     double *_ans; //牛顿插值表
@@ -52,9 +57,33 @@ void Newdon_it::calcaute()
         for(int j=_noip-1;j>i;j--)
         {
             _ans[j] = (_ans[j] - _ans[j-1] ) /
-            ( _array[j].first - _array[j-1-i].first);
+                ( _array[j].first - _array[j-1-i].first);
         }
+    }
+    
+}
+
+double Newdon_it::calcaute_ret(int lhs,int rhs)
+{
+    if(lhs==rhs)
+    {
+        return _array[lhs].second;
+    }
+    else
+    {
+        double a,b,s;
         
+        a=calcaute_ret(lhs+1,rhs);
+        b=calcaute_ret(lhs,rhs-1);
+        
+        s= (a-b)/(_array[rhs].first-_array[lhs].first);
+        
+        if(lhs==0)
+        {
+            _ans[_rcon]=s;
+            _rcon++;
+        }
+        return s;
     }
 }
 
@@ -74,28 +103,14 @@ void Newdon_it::res(double xt)
     cout<<Res<<endl;
 }
 
-void caculate(const double *Part_x,const double *Part_y,double *List,
-              const int Left,const int Right)
+void Newdon_it::show_list()
 {
-    double Ans[10];
-    memset(Ans,0,sizeof Ans);
-    for(int i=0;i<6;i++)
+    for(int i=0;i<_noip;i++)
     {
-        Ans[i]=Part_y[i];
-    }
-    
-    for(int i=1;i<Right;i++)
-    {
-        for(int j=Right-1;j>=i;j--)
-        {
-            Ans[j]=(Ans[j]-Ans[j-1])/(Part_x[j]-Part_x[j-i]);
-        }
-    }
-    for(int i=0;i<Right;i++)
-    {
-        cout<<Ans[i]<<endl;
+        cout<<_ans[i]<<endl;
     }
 }
+
 
 int main(int argc,char** argv)
 {
@@ -107,7 +122,9 @@ int main(int argc,char** argv)
     cin>>num_of_inter_point;
     
     Newdon_it Ni(num_of_inter_point);
-    Ni.calcaute();
+    
+    Ni.calcaute_ret(0,num_of_inter_point);
+    Ni.show_list();
     
     cout << "输入欲计算阶数: ";
     cin >> Order;
@@ -124,6 +141,13 @@ int main(int argc,char** argv)
  0.80 0.88811
  0.90 1.02652
  1.05 1.25382
+ 
+ 0.41075
+ 1.116
+ 0.28
+ 0.197333
+ 0.0312381
+ 0.00029304
  
  0.017037 1.017183
  0.146447 1.157713
