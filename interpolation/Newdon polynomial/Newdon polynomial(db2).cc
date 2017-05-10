@@ -20,8 +20,8 @@ public:
     Newdon_it(const int num_of_inter_point)
     :NOIP(num_of_inter_point)
     {
-        //array = new Point[NOIP];
-        //ans = new double[NOIP];
+        array = new Point[NOIP];
+        ans = new double[NOIP];
         
         for(int i=0;i<NOIP;i++)
         {
@@ -33,9 +33,9 @@ public:
     void calcaute();
 private:
     int NOIP; //插值点个数
-    Point array[10]; //插值点数组
+    Point *array; //插值点数组
     
-    double ans[10]; //牛顿插值表
+    double *ans; //牛顿插值表
 };
 
 void Newdon_it::calcaute()
@@ -91,5 +91,19 @@ int main(int argc,char** argv)
     
 }
 
-
+/*
+ 0.40 0.41075
+ 0.55 0.57815
+ 0.65 0.69675
+ 0.80 0.88811
+ 0.90 1.02652
+ 1.05 1.25382
+ 
+ 0.017037 1.017183
+ 0.146447 1.157713
+ 0.370590 1.448590
+ 0.629410 1.876502
+ 0.853553 2.347975
+ 0.982963 2.672363
+ */
 
