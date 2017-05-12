@@ -5,13 +5,9 @@
 
 #include <cstdio>
 #include <cmath>
-#include <cstring>
-#include <sstream>
-#include <fstream>
-#include <iostream>
-#include <cstdio>
-#include <vector>
 #include <queue>
+#include <cstring>
+#include <iostream>
 
 using namespace std;
 
